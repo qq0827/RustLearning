@@ -157,20 +157,3 @@ fn add(x: i32, y: i32) -> i32 {
 fn pow_2_3(n: i32) -> (i32, i32) {
     (n * n, n * n * n)
 }
-
-
-struct People {
-    name: &'static str,
-    gender: u32,
-    id: u32,
-}
-
-impl People {
-    fn new(name: &'static str, gender: u32, id: u32) -> Self {
-        return  People(name,gender,id);
-    }
-
-    fn name(&self){
-        println!("name={:?}",self.name);
-    }
-}
