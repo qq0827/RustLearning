@@ -1,7 +1,11 @@
 use std::io;
 
 fn main() {
+
+    base_type();
+
     char_type();
+
     compound_type();
 
     range_type();
@@ -9,6 +13,12 @@ fn main() {
     slice_type();
 }
 
+///基本类型
+///
+///# Examples
+/// ```
+/// bool u8 u16 u32 u64 u128
+/// ```
 fn base_type() {
     //基本类型
     let flag: bool = true;      //bool只有两个值true和false
