@@ -1,19 +1,20 @@
 use std::io;
 
 fn main() {
-
     base_type();
 
     char_type();
-
     compound_type();
 
     range_type();
 
     slice_type();
-}
 
-///基本类型
+    struct_test();
+
+    enum_test();
+}
+///# 基本类型
 ///
 ///# Examples
 /// ```
@@ -49,7 +50,7 @@ fn char_type() {
     let c2 = '\'';    //字符转义其他语言一样,用\,两个\\输出一个\, 单引号出输出\'
     println!("{}", c1);
     println!("{}", c2);
-    println!("c1 as u8={}", c1 as u8);
+    println!("c1 as u8={}", c1 as u8);  //通过as进行类型转换，将字符转为 u8类型
 }
 
 fn compound_type() {
@@ -88,16 +89,45 @@ fn range_type() {
 fn slice_type() {
     let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 
-//切片类型 通过引用符&对数组引用,产生切片,进行范围操作
+    //切片类型 通过引用符&对数组引用,产生切片,进行范围操作
     let lists = &arr[0..5];       //切片类型通过数组地址获取数组下标为0开始,5个元素,中间不产生新的数组
 
     assert_eq!(lists.len(), 5);           //验证lists的长度是否为5
 
-//遍历lists的元素,和arr前五个元素进行对比
+    //遍历lists的元素,和arr前五个元素进行对比
     for item in lists {
-        print!("{} ", item);
+        print!("{:?} ", item);
     }
     println!();
+}
+
+///# 输出结构体内容
+fn struct_test(){
+   let p =  People{
+        id:1,
+        name:"tom",
+        sex:"男"
+    };
+
+    //如果在结构体定义的时候不加上#[derive(Debug)]注解，无法通过println!宏直接打印结构体内容
+    //error[E0277]: `People` doesn't implement `std::fmt::Debug`
+    //add `#[derive(Debug)]` or manually implement `std::fmt::Debug`
+    //u8 bool等类型可以通过println!打印，是因为这些类型默认实现Display，这个后面在说
+    //下边没有{}而是改为{:?}输出结构体内容，{:#?}带缩进的输出
+    println!("people = {:?}",p);
+}
+
+fn enum_test(){
+    let status = WindowState::Max;
+    match status {
+        WindowState::Normal => println!("normal"),
+        WindowState::Min => println!("min"),
+        WindowState::Max => println!("max"),
+    }
+    //通过将枚举status转为u8类型,发现这点和其他语言一样
+    println!("enum min val={}",WindowState::Min as u8);
+    println!("enum normal val={}",WindowState::Normal as u8);
+    println!("enum max val={}",WindowState::Max as u8);
 }
 
 fn main1() {
@@ -156,4 +186,20 @@ fn add(x: i32, y: i32) -> i32 {
 ///多返回值
 fn pow_2_3(n: i32) -> (i32, i32) {
     (n * n, n * n * n)
+}
+
+///# 结构体
+///# 定义结构体，通过#[derive(Debug)]注解，才能让println!打印结构体内容
+#[derive(Debug)]
+struct People {
+    id:u32,            //id
+    name:&'static str, //姓名 字符串
+    sex:&'static str,  //性别
+}
+
+#[derive(Debug)]
+enum  WindowState{
+    Min,       //最小化
+    Normal,    //正常
+    Max,       //最大化
 }
