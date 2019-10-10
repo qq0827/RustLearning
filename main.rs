@@ -1,9 +1,11 @@
 use std::io;
 
 fn main() {
+
     base_type();
 
     char_type();
+
     compound_type();
 
     range_type();
