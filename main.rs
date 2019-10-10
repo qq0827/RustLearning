@@ -1,4 +1,7 @@
 use std::io;
+use std::collections::HashMap;
+use std::iter::Map;
+use std::panic::resume_unwind;
 
 fn main() {
 
@@ -15,7 +18,10 @@ fn main() {
     struct_test();
 
     enum_test();
+
+    expression_test();
 }
+
 ///# 基本类型
 ///
 ///# Examples
@@ -104,11 +110,11 @@ fn slice_type() {
 }
 
 ///# 输出结构体内容
-fn struct_test(){
-   let p =  People{
-        id:1,
-        name:"tom",
-        sex:"男"
+fn struct_test() {
+    let p = People {
+        id: 1,
+        name: "tom",
+        sex: "男",
     };
 
     //如果在结构体定义的时候不加上#[derive(Debug)]注解，无法通过println!宏直接打印结构体内容
@@ -116,10 +122,10 @@ fn struct_test(){
     //add `#[derive(Debug)]` or manually implement `std::fmt::Debug`
     //u8 bool等类型可以通过println!打印，是因为这些类型默认实现Display，这个后面在说
     //下边没有{}而是改为{:?}输出结构体内容，{:#?}带缩进的输出
-    println!("people = {:?}",p);
+    println!("people = {:?}", p);
 }
 
-fn enum_test(){
+fn enum_test() {
     let status = WindowState::Max;
     match status {
         WindowState::Normal => println!("normal"),
@@ -127,9 +133,91 @@ fn enum_test(){
         WindowState::Max => println!("max"),
     }
     //通过将枚举status转为u8类型,发现这点和其他语言一样
-    println!("enum min val={}",WindowState::Min as u8);
-    println!("enum normal val={}",WindowState::Normal as u8);
-    println!("enum max val={}",WindowState::Max as u8);
+    println!("enum min val={}", WindowState::Min as u8);
+    println!("enum normal val={}", WindowState::Normal as u8);
+    println!("enum max val={}", WindowState::Max as u8);
+}
+
+fn map_test() {
+    let mut map = HashMap::new();
+    map.insert(1, "rust");
+    map.insert(2, "go");
+    map.insert(3, "csharp");
+
+    println!("{:?}", map);
+
+    for item in map.iter() {
+        println!("{} {}", item.0, item.1);
+    }
+}
+
+fn expression_test() {
+//if语句和其他语言基本一样，只是没有条件没有小括号
+let x = 100;
+if x > 0 {
+    println!("x >0");
+} else {
+    println!("x < 0")
+}
+
+//多重if语句
+let y = 200;
+if y > 10 {
+    println!("level 1");
+} else if y > 20 {
+    println!("level 2");
+} else if y > 30 {
+    println!("level 3");
+} else {
+    println!("level 5");
+}
+
+//let和if组合使用
+let num = if y > 100 {
+    1
+} else {
+    0
+};
+println!("num = {}", num);
+
+//loop 死循环,相当于其他语言的 while(true){ //执行代码} 或者 for(;;){ //执行代码 }
+//下面代码进行注释，不然下面的代码无法执行
+////    loop {
+////        println!("loop out ....");
+////    }
+
+//loop和let组合使用
+let mut counter = 0;
+let result = loop {
+    counter += 1;
+    if counter == 10 {
+        break counter * 2;
+    }
+};
+println!("result = {}", result);
+
+//while
+let mut a = 0;
+while a < 10 {
+    a += 1;
+    println!("a = {}", a);
+}
+
+//for
+for num in (1..100) {
+    println!("for inc num = {}", num);
+}
+
+//match 在rust语言中，没有switch关键字,可以通过match实现相同的功能
+//_ 相当于其他语言中default
+let level = 2;
+match level {
+    1 => { println!("level 1") }
+    2 => println!("level 2"),
+    3 => println!("level 3"),
+    4 => println!("level 4"),
+    _ => println!("level 5")
+}
 }
 
 fn main1() {
@@ -194,14 +282,18 @@ fn pow_2_3(n: i32) -> (i32, i32) {
 ///# 定义结构体，通过#[derive(Debug)]注解，才能让println!打印结构体内容
 #[derive(Debug)]
 struct People {
-    id:u32,            //id
-    name:&'static str, //姓名 字符串
-    sex:&'static str,  //性别
+    id: u32,
+    //id
+    name: &'static str,
+    //姓名 字符串
+    sex: &'static str,  //性别
 }
 
 #[derive(Debug)]
-enum  WindowState{
-    Min,       //最小化
-    Normal,    //正常
+enum WindowState {
+    Min,
+    //最小化
+    Normal,
+    //正常
     Max,       //最大化
 }
